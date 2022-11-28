@@ -30,11 +30,18 @@ import org.pcap4j.core.PcapHandle.TimestampPrecision;
 
 	
 public class App {
-
+	public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
 	public static void main(String[] args) throws IOException, PcapNativeException, NotOpenException
 	{
+		String intro ="";
 		String inputFile = "";
 		Scanner command = new Scanner (System.in);
+
+		System.out.println(ANSI_RED_BACKGROUND
+                           + "Manipulador de IP e MAC Modbus/tcp"
+                           + ANSI_RESET);
+
 		System.out.println("Indique o ficheiro a ser lido:");
 		inputFile = command.nextLine();
 		
