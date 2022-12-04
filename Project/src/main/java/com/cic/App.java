@@ -159,18 +159,16 @@ public class App {
 				byte [] data = modbus.getRawData();
 				byte min = 5;
 				byte max = 30;
-				for( i = 0; i < size; i++)
-				{
+				for(i = 0; i < size; i++ ){
 					data[i+9] = (byte)(Math.random()*(max-min+1)+min);
 				}
-				System.out.println(data);
-				System.out.println(data[6]);
 				
 				//Criar novo pacote
 				UnknownPacket.Builder modbusTCP = buildModbusTCP(data);
 				TcpPacket.Builder tcp = buildTCP(originalSrcPort, originalDestPort, originalSeqNumber, originalAckNumber, originalDataOffset, originalReserved, originalURG, originalACK, originalRST, originalSYN, originalFIN, originalWindow, originalChecksum, originalUrgPointer, modbusTCP);
+
 				IpV4Packet.Builder ipv4 = buildIPv4(originalVersion, originalIHL, originalTOS, originalTotalLength, originalIdentification, originalFragmentationOffset, originalTTL, originalProtocol, originalHeaderChecksum, (Inet4Address) Inet4Address.getByName(srcIP),Inet4Address.getByName(dstIP),tcp);
-				EthernetPacket ethernet = buildEthernet((MacAddress) MacAddress.getByName(dstMAC), (MacAddress) MacAddress.getByName(srcMAC),originalType, ipv4);
+				EthernetPacket ethernet = buildEthernet((MacAddress) MacAddress.getByName(dstMAC), (MacAddress) MacAddress.getByName(srcMAC), originalType, ipv4);
 				
 				dumper.dump(ethernet, originalTimestamp);
 				
