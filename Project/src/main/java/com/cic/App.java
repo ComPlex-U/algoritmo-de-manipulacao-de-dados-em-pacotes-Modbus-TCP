@@ -71,7 +71,7 @@ public class App {
 	public static void readpacket(PcapHandle newHandle) throws PcapNativeException, NotOpenException, IOException
 	{
 		PcapHandle handle = newHandle;
-		
+		// strings with new ip and Mac address source  and destiny 
 		String srcIP = "192.168.1.1";
 		String dstIP = "192.168.2.1";
 		String srcMAC = "00:0d:29:12:54:ac";
@@ -154,9 +154,11 @@ public class App {
 				
 				//Modbus/TCP
 				Packet modbus = packet.get(TcpPacket.class).getPayload();
+				// varieble with the size of modbus packet in the first position 
 				int size = packet.get(TcpPacket.class).getPayload().length() - 9;
 				System.out.println(modbus);
 				byte [] data = modbus.getRawData();
+				
 				byte min = 5;
 				byte max = 30;
 				for(i = 0; i < size; i++ ){
@@ -166,12 +168,13 @@ public class App {
 				//Criar novo pacote
 				UnknownPacket.Builder modbusTCP = buildModbusTCP(data);
 				TcpPacket.Builder tcp = buildTCP(originalSrcPort, originalDestPort, originalSeqNumber, originalAckNumber, originalDataOffset, originalReserved, originalURG, originalACK, originalRST, originalSYN, originalFIN, originalWindow, originalChecksum, originalUrgPointer, modbusTCP);
-
+//add the veriables IP and MAC address (src and dst) to the correct position in teh file 
 				IpV4Packet.Builder ipv4 = buildIPv4(originalVersion, originalIHL, originalTOS, originalTotalLength, originalIdentification, originalFragmentationOffset, originalTTL, originalProtocol, originalHeaderChecksum, (Inet4Address) Inet4Address.getByName(srcIP),Inet4Address.getByName(dstIP),tcp);
 				EthernetPacket ethernet = buildEthernet((MacAddress) MacAddress.getByName(dstMAC), (MacAddress) MacAddress.getByName(srcMAC), originalType, ipv4);
 				
 				dumper.dump(ethernet, originalTimestamp);
 				
+				// try to implement the incrementation of the IP (src and dst) with the top value of 254 
 				String[] parts = srcIP.split("\\.");
 				int oct3 = Integer.parseInt(parts[2]);
 				int oct4 = Integer.parseInt(parts[3]);
