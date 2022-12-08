@@ -154,11 +154,10 @@ public class App {
 				
 				//Modbus/TCP
 				Packet modbus = packet.get(TcpPacket.class).getPayload();
-				// varieble with the size of modbus packet in the first position 
+// calculate the size of the payload and then fetch the entire payload and change the original records to values between 5 and 30
 				int size = packet.get(TcpPacket.class).getPayload().length() - 9;
 				System.out.println(modbus);
 				byte [] data = modbus.getRawData();
-				
 				byte min = 5;
 				byte max = 30;
 				for(i = 0; i < size; i++ ){
